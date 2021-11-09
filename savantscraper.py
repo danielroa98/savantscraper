@@ -9,7 +9,7 @@ import pandas as pd
 from tqdm.auto import tqdm
 
 
-def savant_search(season, team, home_road, csv=False, sep=';'):
+def savant_search(season, team, home_road, createCSV=False, sep=';'):
     """Return detail-level Baseball Savant search results.
 
     Breaks pieces by team, year, and home/road for reasonable file sizes.
@@ -70,14 +70,15 @@ def savant_search(season, team, home_road, csv=False, sep=';'):
                              'tfs_zulu_deprecated'], axis=1, inplace=True)
 
     # Optionally save as csv for loading to another file system
-    if csv:
-        single_combination.to_csv(f"{team}_{season}_{home_road}_detail.csv",
-                                  index=False, sep=sep)
+    if createCSV:
+        print('Creating CSV')
+        single_combination.to_csv(
+            f"{team}_{season}_{home_road}_detail.csv", index=False, sep=sep)
 
-    return single_combination if not csv else None
+    return single_combination if not createCSV else None
 
 
-def database_import(db_name, seasons, teams=None, reload=True):
+def database_import(db_name, seasons, teams=None, createCSV=True, reload=True):
     """Load detail-level Baseball Savant search results into SQLite database.
 
     Creates a database if it does not exist and loads all teams by default.
@@ -131,6 +132,6 @@ def database_import(db_name, seasons, teams=None, reload=True):
 
 
 if __name__ == '__main__':
-
     # Example for two years and two teams
-    database_import('baseball_savant', (2017, 2018), teams=['STL', 'COL'])
+    # database_import('baseball_savant', (2020, 2021), teams=['STL', 'COL'])
+    database_import('baseball_savant', (2019, 2021), teams=['CHC', 'NYY'])
